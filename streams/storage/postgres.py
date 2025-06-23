@@ -19,3 +19,10 @@ async def save_message(stream_id, author, content):
         "content": content,
         "epoch_id": None,
     }
+
+
+async def get_providers():
+    if _pool is None:
+        raise RuntimeError("Postgres pool not initialized")
+    rows = await _pool.fetch("SELECT id, name, created FROM providers ORDER BY created")
+    return [dict(r) for r in rows]

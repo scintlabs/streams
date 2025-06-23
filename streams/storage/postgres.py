@@ -11,11 +11,10 @@ async def init_pool(dsn: str):
 
 
 async def save_message(stream_id, author, content):
-    # Simplified insert; returns dict for demo
-    return {
-        "id": "stub",
-        "stream_id": stream_id,
-        "author": author,
-        "content": content,
-        "epoch_id": None,
-    }
+    query = (
+        "INSERT INTO messages (stream_id, author, content) "
+        "VALUES ($1, $2, $3) "
+        "RETURNING id, stream_id, author, content, ts, epoch_id"
+    )
+    row = await _pool.fetchrow(query, stream_id, author, content)
+    return dict(row)

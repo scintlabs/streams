@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     TIME_GAP_MINUTES: int = 30
     SEMANTIC_THRESHOLD: float = 0.30
     TOP_K: int = 5
+    POSTGRES_DSN: str = "postgresql://postgres:postgres@localhost/postgres"
 
 
 settings = Settings()  # import from anywhere

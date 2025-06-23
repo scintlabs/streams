@@ -1,15 +1,15 @@
 from fastapi import APIRouter
 
+from streams.storage import postgres
+
 router = APIRouter(prefix="/api")
 
 
 @router.get("/providers")
 async def list_providers():
-    # TODO: fetch from storage
-    return []
+    return await postgres.get_providers()
 
 
 @router.post("/streams")
 async def create_stream(name: str):
-    # TODO: insert row + return stream info
-    return {"id": "stub", "name": name}
+    return await postgres.create_stream(name)

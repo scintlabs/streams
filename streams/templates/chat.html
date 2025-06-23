@@ -31,6 +31,33 @@
     const form = document.getElementById("chat-form")
     const input = document.getElementById("chat-input")
 
+    let page = 0
+    const pageSize = 20
+
+    async function loadMessages() {
+        const res = await fetch(`/api/streams/${streamId}/messages?page=${page}&limit=${pageSize}`)
+        if (res.ok) {
+            const msgs = await res.json()
+            msgs.forEach((m) => {
+                const div = document.createElement("div")
+                div.textContent = `${m.author}: ${m.content}`
+                log.appendChild(div)
+            })
+            if (msgs.length > 0) {
+                page++
+            }
+            log.scrollTop = log.scrollHeight
+        }
+    }
+
+    loadMessages()
+
+    log.addEventListener("scroll", () => {
+        if (log.scrollTop + log.clientHeight >= log.scrollHeight - 10) {
+            loadMessages()
+        }
+    })
+
     const scheme = location.protocol === "https:" ? "wss" : "ws"
     const ws = new WebSocket(`${scheme}://${location.host}/streams/${streamId}/ws`)
 

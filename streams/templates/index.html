@@ -3,14 +3,15 @@
     <div class="p-8 bg-white rounded-xl shadow-lg w-96">
         <h1 class="text-2xl font-bold mb-6 text-center">Select Stream</h1>
         <ul id="streams" class="space-y-2">
-            <!-- static placeholder -->
+            {% for stream in streams %}
             <li>
                 <a
-                    href="/streams/00000000-0000-0000-0000-000000000001"
+                    href="/streams/{{ stream.id }}"
                     class="text-blue-600 hover:underline"
-                    >demo-stream</a
+                    >{{ stream.name }}</a
                 >
             </li>
+            {% endfor %}
         </ul>
     </div>
 </div>

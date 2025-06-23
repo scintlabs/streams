@@ -32,7 +32,7 @@
 
 ## 5. Infrastructure / DevOps
 - [ ] Create SQL or Alembic migrations for `providers`, `streams`, `messages`.
-- [ ] Add startup lifespan event to call `postgres.init_pool()` and `qdrant.ensure_collection()`.
+ - [x] Add startup lifespan event to call `postgres.init_pool()` and `qdrant.ensure_collection()`.
 - [ ] Add `.env` variables (`POSTGRES_DSN`, `OPENAI_API_KEY`) and load via `Settings`.
 - [ ] Write unit tests for `EpochManager`, `Linker`, and WebSocket flow.
 - [ ] Provide `docker-compose.yml` (Postgres + Qdrant).

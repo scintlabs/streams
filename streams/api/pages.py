@@ -1,6 +1,8 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Request
+
+from streams.storage import postgres
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
@@ -10,8 +12,10 @@ router = APIRouter()
 
 @router.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def index(request: Request):
-    # TODO: query real streams
-    return templates.TemplateResponse("index.html", {"request": request})
+    streams = await postgres.get_streams()
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "streams": streams}
+    )
 
 
 @router.get(

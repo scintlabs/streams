@@ -2,16 +2,52 @@
 <div class="flex h-full items-center justify-center">
     <div class="p-8 bg-white rounded-xl shadow-lg w-96">
         <h1 class="text-2xl font-bold mb-6 text-center">Select Stream</h1>
+        <form id="create-form" class="flex gap-2 mb-4">
+            <input
+                id="stream-name"
+                type="text"
+                placeholder="New stream name"
+                class="flex-1 border px-3 py-2 rounded-md"
+            />
+            <button class="px-4 py-2 bg-blue-600 text-white rounded-md">
+                Create
+            </button>
+        </form>
         <ul id="streams" class="space-y-2">
-            <!-- static placeholder -->
+            {% for s in streams %}
             <li>
                 <a
-                    href="/streams/00000000-0000-0000-0000-000000000001"
+                    href="/streams/{{ s.id }}"
                     class="text-blue-600 hover:underline"
-                    >demo-stream</a
+                    >{{ s.name }}</a
                 >
             </li>
+            {% else %}
+            <li class="text-gray-500">No streams.</li>
+            {% endfor %}
         </ul>
     </div>
 </div>
+<script type="module">
+    const form = document.getElementById("create-form")
+    const input = document.getElementById("stream-name")
+    const list = document.getElementById("streams")
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault()
+        const name = input.value.trim()
+        if (!name) return
+        const res = await fetch(`/api/streams?name=${encodeURIComponent(name)}`, {
+            method: "POST",
+        })
+        if (res.ok) {
+            const stream = await res.json()
+            list.insertAdjacentHTML(
+                "beforeend",
+                `<li><a class="text-blue-600 hover:underline" href="/streams/${stream.id}">${stream.name}</a></li>`
+            )
+            input.value = ""
+        }
+    })
+</script>
 {% endblock %}

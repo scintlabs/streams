@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from streams.services.epoch import epoch_manager
+from streams.services import link
 from streams.services.router import StreamRouter
 from streams.storage import postgres
 
@@ -21,6 +22,7 @@ async def chat_ws(ws: WebSocket, stream_id: UUID):
             msg = await postgres.save_message(stream_id, "anon", text)
             await epoch_manager.handle(msg)
             await hub.broadcast({"type": "msg", **msg})
+            await link.emit_related(hub, msg)
     except WebSocketDisconnect:
         pass
     finally:

@@ -4,6 +4,8 @@ from typing import Set, Optional
 
 from fastapi import WebSocket
 
+from streams.services.epoch import epoch_manager
+
 
 class StreamRouter:
     def __init__(self, stream_id):
@@ -57,7 +59,7 @@ class StreamRouter:
             self._hb_task = None
 
     def flag_manual_barrier(self):
-        pass
+        epoch_manager.close_epoch(self.stream_id)
 
     async def disconnect(self, ws: WebSocket):
         self._clients.discard(ws)
